@@ -1,0 +1,22 @@
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes
+palvelin-->selain: spa HTML-koodi
+
+note over selain:
+selain saa yhden pavelimen lähettämän html-sivun
+end note
+
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+palvelin-->selain: main.css
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.js
+palvelin-->selain: spa.js
+
+note over selain:
+html-sisältöä manipuloidaan spa.js-koodilla
+end note
+
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+palvelin-->selain: [{ content: "HTML on helppoa", date: "2019-01-01" }, ...]
+
+note over selain:
+selain renderöi spa.js-koodin avulla json-datan näkyville
+end note

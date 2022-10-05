@@ -1,0 +1,17 @@
+selain->palvelin: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+
+note over palvelin:
+POST pyyntö uudesta muistiinpanosta lähtee 
+osoitteeseen new_note_spa header
+typellä application/JSON
+end note 
+
+palvelin->selain: 201 created
+
+note over selain:
+selaimen javascript submittaa formin, luo
+muistiinapano-olion, "puskee" sen palvelimelle
+ja piirtää muistiinpanolistan uudelleen selaimelle
+mukana myös e.preventDefault() joka estää sivuston
+uudelleenpäivittmäisen submitin yhteydessä
+end note

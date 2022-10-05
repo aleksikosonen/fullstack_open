@@ -1,0 +1,41 @@
+
+selain->palvelin: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note
+
+note over selain: 
+POST pyynnön mukana käyttäjän syöte bodyna eli runkona
+end note
+
+note over palvelin:
+palvelinkoodi saa syötedatan kentästä req.body 
+palvelinkoodi tallettaa tämän ja myös päivämäärän.
+tämä olio tallettuu palvelimelle, mutta ei tietokantaan.
+end note
+
+palvelin-->selain: 302 redirect
+
+note over selain: 
+palvelin antaa 302 redirect responsen joka aiheuttaa 
+sivuston uudelleenlataamisen, jonka jälkeen haetaan
+mustiinpanot uudestaan palvelimelta
+end note
+
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes
+palvelin-->selain: HTML-koodi
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+palvelin-->selain: main.css
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.js
+palvelin-->selain: main.js
+
+note over selain:
+selain alkaa suorittaa js-koodia
+joka pyytää JSON-datan palvelimelta
+end note
+
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+palvelin-->selain: [{ content: "Uusi muistiinpano", date: "2022-05-10" }, ...]
+
+note over selain:
+selain suorittaa tapahtumankäsittelijän
+joka renderöi muistiinpanot näytölle,
+tässä näkyy myös uusi syötetty muistiinpano
+end note
