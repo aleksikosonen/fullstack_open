@@ -1,62 +1,72 @@
-const Header = (props) => {
-  return <h1>{props.course}</h1>
-}
+import { useState } from 'react'
 
-const Part = (props) => {
+const StatisticLine = (props) => {
   return (
-    <p>
-      {props.part} {props.exercises}
-    </p>
+    <tr>
+      <td> {props.text}</td>
+      <td> {props.value}</td>
+    </tr>
   )
 }
 
-const Content = (props) => {
+const Statistics = (props) => {
+  const average = () => {
+    return (props.good - props.bad) / props.total
+  }
+
+  const positive = () => {
+    return (props.good / props.total) * 100 + ' %'
+  }
   return (
     <div>
-      <Part part={props.course.parts[0].name} exercises={props.course.parts[0].exercises} />
-      <Part part={props.course.parts[1].name} exercises={props.course.parts[1].exercises} />
-      <Part part={props.course.parts[2].name} exercises={props.course.parts[2].exercises} />
+      <h1>Statistics</h1>
+      {props.good !== 0 || props.bad !== 0 || props.neutral !== 0 ? (
+        <table>
+          <tbody>
+            <StatisticLine text={'good'} value={props.good} />
+            <StatisticLine text={'neutral'} value={props.neutral} />
+            <StatisticLine text={'bad'} value={props.bad} />
+            <StatisticLine text={'all'} value={props.total} />
+            <StatisticLine text={'average'} value={average()} />
+            <StatisticLine text={'positive'} value={positive()} />
+          </tbody>
+        </table>
+      ) : (
+        <div>No feedback given</div>
+      )}
     </div>
   )
 }
 
-const Total = (props) => {
-  return (
-    <p>
-      Number of exercises{' '}
-      {props.exercises1 + props.exercises2 + props.exercises3}
-    </p>
-  )
-}
-
 const App = () => {
-  const course = {
-    name: 'Half Stack application development',
-    parts: [
-      {
-        name: 'Fundamentals of React',
-        exercises: 10
-      },
-      {
-        name: 'Using props to pass data',
-        exercises: 7
-      },
-      {
-        name: 'State of a component',
-        exercises: 14
-      }
-    ]
+  // tallenna napit omaan tilaansa
+  const [good, setGood] = useState(0)
+  const [neutral, setNeutral] = useState(0)
+  const [bad, setBad] = useState(0)
+  const [total, setTotal] = useState(0)
+
+  const handleClickGood = () => {
+    setGood(good + 1)
+    setTotal(total + 1)
+  }
+  const handleClickNeutral = () => {
+    setNeutral(neutral + 1)
+    setTotal(total + 1)
+  }
+  const handleClickBad = () => {
+    setBad(bad + 1)
+    setTotal(total + 1)
   }
 
   return (
     <div>
-      <Header course={course.name} />
-      <Content course={course} />
-      <Total
-        exercises1={course.parts[0].exercises}
-        exercises2={course.parts[1].exercises}
-        exercises3={course.parts[2].exercises}
-      />
+      <h1>Give feedback</h1>
+      <div>
+        <button onClick={() => handleClickGood()}>good</button>
+        <button onClick={() => handleClickNeutral()}>neutral</button>
+        <button onClick={() => handleClickBad()}>bad</button>
+      </div>
+      <Statistics good={good} bad={bad} neutral={neutral} total={total} />
     </div>
   )
 }
