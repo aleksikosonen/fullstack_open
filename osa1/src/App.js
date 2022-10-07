@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const App = () => {
   const anecdotes = [
@@ -12,16 +12,43 @@ const App = () => {
   ]
 
   const [selected, setSelected] = useState(0)
+  const [points, setPoints] = useState(Array(anecdotes.length).fill(0))
+  const [mostVotedIndex, setMostVotedIndex] = useState(0)
+  const [mostVotes, setMostVotes] = useState(0)
 
-  function generateNewAnecdote() {
+  const generateNewAnecdote = () => {
     const maxValue = anecdotes.length
     const newIndex = Math.floor(Math.random() * maxValue)
     setSelected(newIndex)
   }
 
+  useEffect(() => {
+    points.forEach((value, index) => {
+      if (value > mostVotes) {
+        setMostVotes(value)
+        setMostVotedIndex(index)
+      }
+    })
+  })
+
+  const voteForAnecdote = () => {
+    const copy = [...points]
+    copy[selected] += 1
+    setPoints(copy)
+  }
+
   return (
     <div>
+      <h1>Anecdote of the day</h1>
       <div>{anecdotes[selected]}</div>
+      <div>Has {points[selected]} points</div>
+      <button
+        onClick={() => {
+          voteForAnecdote()
+        }}
+      >
+        Vote
+      </button>
       <button
         onClick={() => {
           generateNewAnecdote()
@@ -29,6 +56,13 @@ const App = () => {
       >
         Next anecdote
       </button>
+      <h1>Anecdote with most votes</h1>
+      {mostVotes !== 0 && (
+        <div>
+          <div>{anecdotes[mostVotedIndex]}</div>
+          <div>Has {mostVotes} votes</div>
+        </div>
+      )}
     </div>
   )
 }
