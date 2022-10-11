@@ -1,30 +1,42 @@
-const Course = (props) => {
+const Course = ({course}) => {
   return (
     <div>
-      <Header name={props.course.name}></Header>
-      <Content course={props.course}></Content>
+      <Header name={course.name}></Header>
+      <Content course={course}></Content>
+      <Total parts={course.parts}></Total>
     </div>
   )
 }
 
-const Header = (props) => {
-  return <h1>{props.name}</h1>
+const Header = ({name}) => {
+  return <h1>{name}</h1>
 }
 
-const Part = (props) => {
+const Total = ({parts}) => {
+  const total = parts.reduce((s,p) => {
+     return s + p.exercises
+  }, 0)
+  return <div>Total {total}</div>
+}
+
+const Part = ({part, exercises}) => {
   return (
     <p>
-      {props.part} {props.exercises}
+      {part} {exercises}
     </p>
   )
 }
 
-const Content = (props) => {
-  return (
-    props.course.parts.map((element) => {
-      return <Part key={element.id} part={element.name} exercises={element.exercises} />
-    })
-  )
+const Content = ({course}) => {
+  return course.parts.map((element) => {
+    return (
+      <Part
+        key={element.id}
+        part={element.name}
+        exercises={element.exercises}
+      />
+    )
+  })
 }
 
 const App = () => {
