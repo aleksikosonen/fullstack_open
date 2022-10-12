@@ -1,4 +1,7 @@
 import { useState } from 'react'
+import Filter from './components/Filter'
+import PersonForm from './components/PersonForm'
+import Persons from './components/Persons'
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -17,9 +20,7 @@ const App = () => {
       name: newName,
       number: newNumber,
     }
-    console.log(persons)
     const personList = persons.map((person) => person.name)
-    console.log(personList)
     if (personList.includes(newName)) {
       alert(`${newName} is already added to phonebook`)
     } else {
@@ -44,32 +45,17 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <div>filter shown with
-        <input value={filter} onChange={handleFilterChange}></input>
-      </div>
+      <Filter filter={filter} handleFilterChange={handleFilterChange}></Filter>
       <h2>add new</h2>
-      <form onSubmit={addName}>
-        <div>
-          name: <input value={newName} onChange={handleChange} />
-        </div>
-        <div>
-          number: <input value={newNumber} onChange={handleNumberChange} />
-        </div>
-        <div>
-          <button type='submit'>add</button>
-        </div>
-      </form>
+      <PersonForm
+        addName={addName}
+        newName={newName}
+        newNumber={newNumber}
+        handleChange={handleChange}
+        handleNumberChange={handleNumberChange}
+      ></PersonForm>
       <h2>Numbers</h2>
-      {persons.map((person) => {
-        if (person.name.toLowerCase().includes(filter.toLowerCase())) {
-          return (
-            <div key={person.name}>
-              {person.name} {person.number}
-            </div>
-          )
-        }
-        return false
-      })}
+      <Persons persons={persons} filter={filter}></Persons>
     </div>
   )
 }
