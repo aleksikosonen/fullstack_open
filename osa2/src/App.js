@@ -24,8 +24,28 @@ const App = () => {
       number: newNumber,
     }
     const personList = persons.map((person) => person.name)
+
     if (personList.includes(newName)) {
-      alert(`${newName} is already added to phonebook`)
+      if (
+        window.confirm(
+          `${newName} is already added to phonebook, replace the old number with a new one?`
+        )
+      ) {
+        const personToUpdate = persons.filter(
+          (person) => person.name === newName
+        )[0]
+        personService
+          .update(personToUpdate.id, nameObject)
+          .then((updatedPerson) => {
+            setPersons(
+              persons.map((person) =>
+                person.name !== newName ? person : updatedPerson
+              )
+            )
+            setNewName('')
+            setNewNumber('')
+          })
+      }
     } else {
       personService.create(nameObject).then((createdPerson) => {
         setPersons(persons.concat(createdPerson))
@@ -37,8 +57,8 @@ const App = () => {
 
   const deleteName = (person) => {
     if (window.confirm('Delete ' + person.name)) {
-      personService.remove(person.id).then((response)=> {
-        setPersons(persons.filter(element => element.id !== person.id))
+      personService.remove(person.id).then((response) => {
+        setPersons(persons.filter((element) => element.id !== person.id))
       })
     }
   }
@@ -68,7 +88,11 @@ const App = () => {
         handleNumberChange={handleNumberChange}
       ></PersonForm>
       <h2>Numbers</h2>
-      <Persons persons={persons} filter={filter} deleteName={deleteName}></Persons>
+      <Persons
+        persons={persons}
+        filter={filter}
+        deleteName={deleteName}
+      ></Persons>
     </div>
   )
 }
