@@ -1,43 +1,70 @@
 import { useState, useEffect } from 'react'
+import Filter from './components/Filter'
+import PersonForm from './components/PersonForm'
+import Persons from './components/Persons'
 import axios from 'axios'
-import SingleCountry from './components/SingleCountry'
-import Country from './components/Country'
 
 const App = () => {
-  const [countries, setCountries] = useState([])
-  const [filteredCountries, setFilteredCountries] = useState([])
+  const [persons, setPersons] = useState([])
+  const [newName, setNewName] = useState('')
+  const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
 
   useEffect(() => {
-    axios.get('https://restcountries.com/v3.1/all').then((response) => {
-      setCountries(response.data)
+    axios.get('http://localhost:3001/persons').then((response) => {
+      setPersons(response.data)
     })
   }, [])
-  
-  const handleChange = (e) => {
-    setFilter(e.target.value.toLowerCase())
-    setFilteredCountries(
-      countries.filter((country) =>
-        country.name.common.toLowerCase().includes(filter)
-      )
-    )
+
+  axios.get('http://localhost:3001/persons').then((response) => {
+    const notes = response.data
+  })
+  const addName = (event) => {
+    event.preventDefault()
+    const nameObject = {
+      name: newName,
+      number: newNumber,
+    }
+    const personList = persons.map((person) => person.name)
+    if (personList.includes(newName)) {
+      alert(`${newName} is already added to phonebook`)
+    } else {
+      axios
+        .post('http://localhost:3001/persons', nameObject)
+        .then((response) => {
+          setPersons(persons.concat(nameObject))
+          setNewName('')
+          setNewNumber('')
+        })
+    }
   }
 
-  // onkeyup added to enhance the backspace registration on the filteredCountries state
+  const handleChange = (e) => {
+    setNewName(e.target.value)
+  }
+
+  const handleNumberChange = (e) => {
+    setNewNumber(e.target.value)
+  }
+
+  const handleFilterChange = (e) => {
+    setFilter(e.target.value)
+  }
+
   return (
     <div>
-      <div>
-        Find countries <input value={filter} onChange={handleChange} onKeyUp={handleChange}></input>
-      </div>
-      {filteredCountries.length === 1 ? (
-        <SingleCountry country={filteredCountries[0]} />
-      ) : filteredCountries.length > 10 ? (
-        <div>Too many matches, specify another filter</div>
-      ) : (
-        filteredCountries.map((country) => (
-          <Country key={country.name.common} country={country} />
-        ))
-      )}
+      <h2>Phonebook</h2>
+      <Filter filter={filter} handleFilterChange={handleFilterChange}></Filter>
+      <h2>add new</h2>
+      <PersonForm
+        addName={addName}
+        newName={newName}
+        newNumber={newNumber}
+        handleChange={handleChange}
+        handleNumberChange={handleNumberChange}
+      ></PersonForm>
+      <h2>Numbers</h2>
+      <Persons persons={persons} filter={filter}></Persons>
     </div>
   )
 }
