@@ -13,7 +13,7 @@ const App = () => {
       setCountries(response.data)
     })
   }, [])
-
+  
   const handleChange = (e) => {
     setFilter(e.target.value.toLowerCase())
     setFilteredCountries(
