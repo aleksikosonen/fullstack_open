@@ -11,14 +11,19 @@
       "id": 2
     },
     {
-      "name": "Mary Poppendieck",
-      "number": "39-23-6423122",
-      "id": 4
-    },
-    {
       "name": "Uusi Tyyppi",
       "number": "0400 123 331",
       "id": 5
+    },
+    {
+      "name": "345",
+      "number": "3525",
+      "id": 10
+    },
+    {
+      "name": "Uusi tyybbi",
+      "number": "123",
+      "id": 11
     }
   ]
 }
