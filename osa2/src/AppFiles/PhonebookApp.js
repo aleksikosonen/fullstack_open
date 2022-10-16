@@ -1,3 +1,7 @@
+/*
+Kopioimalla tämän App.js tiedoston sisältöön saa Phonebook tehtävän toimimaan
+*/
+
 import { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
