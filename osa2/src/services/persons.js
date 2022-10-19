@@ -1,9 +1,10 @@
 import axios from 'axios'
-const baseUrl = 'https://koso-fullstack-puhelinluettelo.herokuapp.com/api/persons'
+const baseUrl = '/api/persons/'
 
 const getAll = () => {
   const request = axios.get(baseUrl)
   return request.then((response) => {
+    console.log(response.data)
     return response.data
   })
 }
