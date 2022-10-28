@@ -16,7 +16,6 @@ const App = () => {
   useEffect(() => {
     personService.getAll().then((initialPersons) => {
       setPersons(initialPersons)
-      console.log(persons)
     })
   }, [])
 
@@ -36,7 +35,7 @@ const App = () => {
     }
     const personList = persons.map((person) => person.name)
 
-    if (personList.includes(newName)) {
+    if (personList.includes(nameObject.name)) {
       if (
         window.confirm(
           `${newName} is already added to phonebook, replace the old number with a new one?`
@@ -58,18 +57,21 @@ const App = () => {
             setNewNumber('')
           })
           .catch((error) => {
-            showInfoMessage(
-              `Information of ${personToUpdate.name} has already been removed from the server`
-            )
+            showInfoMessage(`${error.response.data.error}`)
           })
       }
     } else {
-      personService.create(nameObject).then((createdPerson) => {
-        setPersons(persons.concat(createdPerson))
-        setNewName('')
-        setNewNumber('')
-        showInfoMessage(`Added ${createdPerson.name}`)
-      })
+      personService
+        .create(nameObject)
+        .then((createdPerson) => {
+          setPersons(persons.concat(createdPerson))
+          setNewName('')
+          setNewNumber('')
+          showInfoMessage(`Added ${createdPerson.name}`)
+        })
+        .catch((error) => {
+          showInfoMessage(`${error.response.data.error}`)
+        })
     }
   }
 
