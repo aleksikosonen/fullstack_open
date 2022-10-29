@@ -2,9 +2,11 @@ const mongoose = require('mongoose')
 const supertest = require('supertest')
 const helper = require('./test_helper')
 const app = require('../app')
+const bcrypt = require('bcrypt')
 
 const api = supertest(app)
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
 describe('when there is initially some notes saved', () => {
   beforeEach(async () => {
@@ -33,15 +35,17 @@ test('there are two notes', async () => {
   expect(response.body).toHaveLength(2)
 })*/
 
-describe('addition of a new test', () => {
+// test will fail due to reguiring a token auth. tried adding set authorization but failed
+describe('addition of a new blog', () => {
   test('blogs can be added', async () => {
     const initialBlogs = await api.get('/api/blogs')
 
     const blog = {
-      title: 'Gravelpyöräily',
+      title: 'Maantiepyöräily',
       author: 'Koistine',
-      url: 'www',
+      url: 'https://www.canyon.com/',
       likes: '100',
+      userId: '635ced56b938064117bbc60d',
     }
 
     await api
@@ -68,6 +72,60 @@ describe('delete blog', () => {
 
     const contents = blogsAtEnd.body.map((blog) => blog.title)
     expect(contents).not.toContain(blogToDelete.title)
+  })
+})
+
+describe('when there is initially one user at db', () => {
+  beforeEach(async () => {
+    await User.deleteMany({})
+
+    const passwordHash = await bcrypt.hash('salainen', 10)
+    const user = new User({ username: 'Goistinen', name: 'Kaleksi Goistinen', passwordHash })
+
+    await user.save()
+  })
+
+  test('creation succeeds with a fresh username', async () => {
+    const usersAtStart = await helper.usersInDb()
+
+    const newUser = {
+      username: 'Goistinen1',
+      name: 'Kaleksi Goistinen',
+      password: 'salasana',
+    }
+
+    await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd).toHaveLength(usersAtStart.length + 1)
+
+    const usernames = usersAtEnd.map((u) => u.username)
+    expect(usernames).toContain(newUser.username)
+  })
+
+  test('creation fails with proper statuscode and message if username already taken', async () => {
+    const usersAtStart = await helper.usersInDb()
+
+    const newUser = {
+      username: 'Goistinen',
+      name: 'Kaleksi Goistinen',
+      password: 'salasana',
+    }
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    expect(result.body.error).toContain('username must be unique')
+
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd).toHaveLength(usersAtStart.length)
   })
 })
 

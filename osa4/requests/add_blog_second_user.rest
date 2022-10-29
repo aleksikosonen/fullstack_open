@@ -1,0 +1,11 @@
+post http://localhost:3001/api/blogs
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkfDtmlzdCIsImlkIjoiNjM1Y2YxOGVlMmVhOGVlMjk1YWE5YzBjIiwiaWF0IjoxNjY3MDM1NjYwfQ.xLO-nlESyRxS20DkxAv7Qh56FK7E3Vqp2csqP_U4V0k
+
+{
+    "title": "Maantiepyöräily",
+    "author": "Maantie Pyöräilijä",
+    "url": "https://www.canyon.com/",
+    "likes": "100",
+    "userId": "635cf18ee2ea8ee295aa9c0c"
+}

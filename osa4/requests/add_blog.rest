@@ -1,0 +1,11 @@
+post http://localhost:3001/api/blogs
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkdvaXN0aW5lbiIsImlkIjoiNjM1Y2YwZWJlMmViOGU1YTQ2NDE1YTk4IiwiaWF0IjoxNjY3MDM1MzgxfQ.qg8hpezpe_YRJYpQjit1p9yzB1QOUQq5i8f6AAHkUe8
+
+{
+    "title": "Maantiepyöräily on kivaa",
+    "author": "Maantie Pyöräilijä",
+    "url": "https://www.canyon.com/",
+    "likes": "100",
+    "userId": "635cf0ebe2eb8e5a46415a98"
+}
