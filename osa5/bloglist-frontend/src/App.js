@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
+import NewBlogForm from './components/NewBlogForm'
 import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -10,6 +11,7 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [errorMessage, setErrorMessage] = useState(null)
   const [user, setUser] = useState(null)
+  const [newBlog, setNewBlog] = useState({ title: '', author: '', url: '' })
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs))
@@ -41,6 +43,29 @@ const App = () => {
         setErrorMessage(null)
       }, 5000)
     }
+  }
+
+  const handleNewBlog = async () => {
+    const title = newBlog.title
+    const author = newBlog.author
+    const url = newBlog.url
+    try {
+      const blog = await blogService.create({
+        title,
+        author,
+        url,
+      })
+      setBlogs(blogs.concat(blog))
+    } catch (exception) {
+      setErrorMessage('Error adding blog')
+    }
+  }
+
+  const handleBlogChange = (event) => {
+    const title = event.target.name
+    const userInput = event.target.value
+    setNewBlog({ ...newBlog, [title]: userInput });
+    console.log(newBlog)
   }
 
   const handleLogOut = async () => {
@@ -89,6 +114,11 @@ const App = () => {
       {blogs.map((blog) => (
         <Blog key={blog.id} blog={blog} />
       ))}
+      <NewBlogForm
+        blog={newBlog}
+        createBlog={handleNewBlog}
+        handleInputChange={handleBlogChange}
+      />
     </div>
   )
 }
