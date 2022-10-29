@@ -9,7 +9,7 @@ const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [errorMessage, setErrorMessage] = useState(null)
+  const [notificationMessage, setNotificationMessage] = useState(null)
   const [user, setUser] = useState(null)
   const [newBlog, setNewBlog] = useState({ title: '', author: '', url: '' })
 
@@ -38,14 +38,15 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      setErrorMessage('wrong credentials')
+      setNotificationMessage('wrong credentials')
       setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
+        setNotificationMessage(null)
+      }, 3000)
     }
   }
 
-  const handleNewBlog = async () => {
+  const handleNewBlog = async (event) => {
+    event.preventDefault()
     const title = newBlog.title
     const author = newBlog.author
     const url = newBlog.url
@@ -56,15 +57,20 @@ const App = () => {
         url,
       })
       setBlogs(blogs.concat(blog))
+      setNewBlog({ title: '', author: '', url: '' })
+      setNotificationMessage(`A new blog ${newBlog.title} by ${newBlog.author} added`)
+      setTimeout(() => {
+        setNotificationMessage(null)
+      }, 3000)
     } catch (exception) {
-      setErrorMessage('Error adding blog')
+      setNotificationMessage('Error adding blog')
     }
   }
 
   const handleBlogChange = (event) => {
     const title = event.target.name
     const userInput = event.target.value
-    setNewBlog({ ...newBlog, [title]: userInput });
+    setNewBlog({ ...newBlog, [title]: userInput })
     console.log(newBlog)
   }
 
@@ -77,7 +83,7 @@ const App = () => {
     return (
       <div>
         <h2>Log in to application</h2>
-        <Notification message={errorMessage} />
+        <Notification message={notificationMessage} />
         <form onSubmit={handleLogin}>
           <div>
             username
@@ -106,6 +112,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
+      <Notification message={notificationMessage} />
       <div>
         {user.name} is logged in
         <button onClick={handleLogOut}>logout</button>
