@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import NewBlogForm from './components/NewBlogForm'
 import Notification from './components/Notification'
+import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -11,7 +12,7 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [notificationMessage, setNotificationMessage] = useState(null)
   const [user, setUser] = useState(null)
-  const [newBlog, setNewBlog] = useState({ title: '', author: '', url: '' })
+  const blogRef = useRef()
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs))
@@ -45,33 +46,20 @@ const App = () => {
     }
   }
 
-  const handleNewBlog = async (event) => {
-    event.preventDefault()
-    const title = newBlog.title
-    const author = newBlog.author
-    const url = newBlog.url
+  const addBlog = async (blogObject) => {
     try {
-      const blog = await blogService.create({
-        title,
-        author,
-        url,
-      })
+      const blog = await blogService.create(blogObject)
       setBlogs(blogs.concat(blog))
-      setNewBlog({ title: '', author: '', url: '' })
-      setNotificationMessage(`A new blog ${newBlog.title} by ${newBlog.author} added`)
+      blogRef.current.toggleVisibility()
+      setNotificationMessage(
+        `A new blog ${blogObject.title} by ${blogObject.author} added`
+      )
       setTimeout(() => {
         setNotificationMessage(null)
       }, 3000)
     } catch (exception) {
       setNotificationMessage('Error adding blog')
     }
-  }
-
-  const handleBlogChange = (event) => {
-    const title = event.target.name
-    const userInput = event.target.value
-    setNewBlog({ ...newBlog, [title]: userInput })
-    console.log(newBlog)
   }
 
   const handleLogOut = async () => {
@@ -113,19 +101,17 @@ const App = () => {
     <div>
       <h2>blogs</h2>
       <Notification message={notificationMessage} />
-      <div>
+      <div className='margin-bottom'>
         {user.name} is logged in
         <button onClick={handleLogOut}>logout</button>
       </div>
       <br />
+      <Togglable buttonLabel='Create new blog' ref={blogRef}>
+        <NewBlogForm createBlog={addBlog} />
+      </Togglable>
       {blogs.map((blog) => (
         <Blog key={blog.id} blog={blog} />
       ))}
-      <NewBlogForm
-        blog={newBlog}
-        createBlog={handleNewBlog}
-        handleInputChange={handleBlogChange}
-      />
     </div>
   )
 }
