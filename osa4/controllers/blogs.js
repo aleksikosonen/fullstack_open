@@ -13,7 +13,11 @@ const getTokenFrom = (request) => {
 }
 
 blogsRouter.get('/', async (request, response) => {
-  const blog = await Blog.find({}).populate('user', { username: 1, name: 1, id: 1 })
+  const blog = await Blog.find({}).populate('user', {
+    username: 1,
+    name: 1,
+    id: 1,
+  })
   response.json(blog)
 })
 
@@ -41,6 +45,17 @@ blogsRouter.post('/', async (request, response) => {
   await user.save()
 
   response.json(savedBlog)
+})
+
+blogsRouter.put('/:id', async (request, response, next) => {
+  const body = request.body
+
+  try {
+    const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, body, { new: true })
+    response.json(updatedBlog)
+  } catch(exception) {
+    response.status(400).end()
+  }
 })
 
 blogsRouter.delete('/:id', async (request, response) => {

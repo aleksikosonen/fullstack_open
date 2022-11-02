@@ -62,6 +62,15 @@ const App = () => {
     }
   }
 
+  const addLike = async (blogId, blogObject) => {
+    try {
+      const response = await blogService.update(blogId, blogObject)
+      setBlogs(blogs.map((blog) => (blog.id !== response.id ? blog : response)))
+    } catch (exception) {
+      setNotificationMessage(`Error updating ${blogObject} blog`)
+    }
+  }
+
   const handleLogOut = async () => {
     window.localStorage.removeItem('loggedBlogger')
     setUser(null)
@@ -110,7 +119,7 @@ const App = () => {
         <NewBlogForm createBlog={addBlog} />
       </Togglable>
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} updateBlogWithLikes={addLike} />
       ))}
     </div>
   )
