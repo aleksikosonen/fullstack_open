@@ -30,4 +30,4 @@ const remove = async (id) => {
   return request.data
 }
 
-export default { getAll, create, update, setToken, getAll, remove }
+export default { getAll, create, update, setToken, remove }

@@ -74,15 +74,13 @@ const App = () => {
   const deleteBlog = async (blogObject) => {
     try {
       if (window.confirm(`Blog ${blogObject.title}`)) {
-        const response = await blogService.remove(blogObject.id)
+        await blogService.remove(blogObject.id)
         setNotificationMessage(`Deleted blog ${blogObject.title}`)
         setTimeout(() => {
           setNotificationMessage(null)
         }, 3000)
       }
-      setBlogs(
-        blogs.filter(blog => blog.id !== blogObject.id)
-      )
+      setBlogs(blogs.filter((blog) => blog.id !== blogObject.id))
     } catch (exception) {
       setNotificationMessage(`Error deleting ${blogObject.id} blog`)
     }
