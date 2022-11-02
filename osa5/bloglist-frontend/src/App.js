@@ -71,6 +71,23 @@ const App = () => {
     }
   }
 
+  const deleteBlog = async (blogObject) => {
+    try {
+      if (window.confirm(`Blog ${blogObject.title}`)) {
+        const response = await blogService.remove(blogObject.id)
+        setNotificationMessage(`Deleted blog ${blogObject.title}`)
+        setTimeout(() => {
+          setNotificationMessage(null)
+        }, 3000)
+      }
+      setBlogs(
+        blogs.filter(blog => blog.id !== blogObject.id)
+      )
+    } catch (exception) {
+      setNotificationMessage(`Error deleting ${blogObject.id} blog`)
+    }
+  }
+
   const handleLogOut = async () => {
     window.localStorage.removeItem('loggedBlogger')
     setUser(null)
@@ -118,9 +135,17 @@ const App = () => {
       <Togglable buttonLabel='Create new blog' ref={blogRef}>
         <NewBlogForm createBlog={addBlog} />
       </Togglable>
-      {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} updateBlogWithLikes={addLike} />
-      ))}
+      {blogs
+        .sort((a, b) => b.likes - a.likes)
+        .map((blog) => (
+          <Blog
+            key={blog.id}
+            blog={blog}
+            updateBlogWithLikes={addLike}
+            deleteBlog={deleteBlog}
+            user={user}
+          />
+        ))}
     </div>
   )
 }

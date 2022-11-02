@@ -1,4 +1,4 @@
-const Blog = ({ blog, updateBlogWithLikes }) => {
+const Blog = ({ blog, updateBlogWithLikes, deleteBlog, user }) => {
   const likeBlog = () => {
     const likedBlog = {
       user: blog.user.id,
@@ -10,6 +10,11 @@ const Blog = ({ blog, updateBlogWithLikes }) => {
     updateBlogWithLikes(blog.id, likedBlog)
   }
 
+  const removeBlog = () => {
+    deleteBlog(blog)
+  }
+
+
   return (
     <div>
       <div>
@@ -17,6 +22,11 @@ const Blog = ({ blog, updateBlogWithLikes }) => {
       </div>
       <div>Likes {blog.likes}</div>
       <button onClick={likeBlog}>Like</button>
+      {blog.user.username === user.username ? (
+         <button onClick={removeBlog}>Delete</button>
+      ) : (null)} {
+       
+      }
     </div>
   )
 }
