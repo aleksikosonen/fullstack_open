@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types'
+import { useState } from 'react'
 
 const Blog = ({ blog, updateBlogWithLikes, deleteBlog, user }) => {
   const likeBlog = () => {
@@ -16,16 +17,33 @@ const Blog = ({ blog, updateBlogWithLikes, deleteBlog, user }) => {
     deleteBlog(blog)
   }
 
+  const [showDetails, setShowDetails] = useState(false)
+
+  const handleDetails = () => {
+    setShowDetails(!showDetails)
+  }
+
   return (
     <div>
-      <div>
-        {blog.title} {blog.author}
+      <div className='title'>
+        {blog.title}
+        <button className='viewDetails' onClick={handleDetails}>View</button>
       </div>
-      <div>Likes {blog.likes}</div>
-      <button onClick={likeBlog}>Like</button>
-      {blog.user.username === user.username ? (
-        <button onClick={removeBlog}>Delete</button>
-      ) : null}
+      {showDetails && (
+        <div className='blogDetails'>
+          <div className='author'>Likes {blog.author}</div>
+          <div className='likes'>Likes {blog.likes}</div>
+          <div className='url'>Likes {blog.url}</div>
+          <button onClick={likeBlog}>Like</button>
+          {blog.user && (
+            <div>
+              {blog.user.username === user.username && (
+                <button onClick={removeBlog}>Delete</button>
+              )}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   )
 }
