@@ -91,59 +91,63 @@ const App = () => {
     setUser(null)
   }
 
-  if (user === null) {
-    return (
-      <div>
-        <h2>Log in to application</h2>
-        <Notification message={notificationMessage} />
-        <form onSubmit={handleLogin}>
-          <div>
-            username
-            <input
-              type='text'
-              value={username}
-              name='Username'
-              onChange={({ target }) => setUsername(target.value)}
-            />
-          </div>
-          <div>
-            password
-            <input
-              type='password'
-              value={password}
-              name='Password'
-              onChange={({ target }) => setPassword(target.value)}
-            />
-          </div>
-          <button type='submit'>login</button>
-        </form>
-      </div>
-    )
-  }
-
   return (
     <div>
       <h2>blogs</h2>
       <Notification message={notificationMessage} />
-      <div className='margin-bottom'>
-        {user.name} is logged in
-        <button onClick={handleLogOut}>logout</button>
-      </div>
-      <br />
-      <Togglable buttonLabel='Create new blog' ref={blogRef}>
-        <NewBlogForm createBlog={addBlog} />
-      </Togglable>
-      {blogs
-        .sort((a, b) => b.likes - a.likes)
-        .map((blog) => (
-          <Blog
-            key={blog.id}
-            blog={blog}
-            updateBlogWithLikes={addLike}
-            deleteBlog={deleteBlog}
-            user={user}
-          />
-        ))}
+
+      {user === null ? (
+        <div>
+          <h2>Log in to application</h2>
+          <form onSubmit={handleLogin}>
+            <div>
+              username
+              <input
+                id='username'
+                type='text'
+                value={username}
+                name='Username'
+                onChange={({ target }) => setUsername(target.value)}
+              />
+            </div>
+            <div>
+              password
+              <input
+                id='password'
+                type='password'
+                value={password}
+                name='Password'
+                onChange={({ target }) => setPassword(target.value)}
+              />
+            </div>
+            <button id='login' type='submit'>
+              login
+            </button>
+          </form>
+        </div>
+      ) : (
+        <div>
+          <div className='margin-bottom'>
+            {user.name} is logged in
+            <button onClick={handleLogOut}>logout</button>
+          </div>
+          <br />
+          <Togglable buttonLabel='Create new blog' ref={blogRef}>
+            <NewBlogForm createBlog={addBlog} />
+          </Togglable>
+          {blogs
+            .sort((a, b) => b.likes - a.likes)
+            .map((blog) => (
+              <Blog
+                key={blog.id}
+                blog={blog}
+                updateBlogWithLikes={addLike}
+                deleteBlog={deleteBlog}
+                user={user}
+              />
+            ))}
+        </div>
+      )}
     </div>
   )
 }
