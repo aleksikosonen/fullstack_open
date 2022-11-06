@@ -10,7 +10,7 @@ const AnecdoteForm = (props) => {
     event.target.anecdote.value = ''
     dispatch(createAnectodte(content))
   }
-
+  
   return (
     <div>
       <h2>create new</h2>
