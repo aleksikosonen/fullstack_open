@@ -14,10 +14,13 @@ const notificationSlice = createSlice({
   },
 })
 
+let timeout 
+
 export const showNotification = (notification, time) => {
    return dispatch => {
     dispatch(createNotification(notification))
-    setTimeout(() => {
+    clearTimeout(timeout)
+    timeout = setTimeout(() => {
       dispatch(resetNotification())
     }, time * 1000);
   }
