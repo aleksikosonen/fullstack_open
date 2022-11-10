@@ -1,12 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import anecdoteService from '../services/anecdotes'
 
-export const voteCreator = (id) => {
-  return (dispatch) => {
-    dispatch(addVote(id))
-  }
-}
-
 const anecdoteSlice = createSlice({
   name: 'anecdotes',
   initialState: [],

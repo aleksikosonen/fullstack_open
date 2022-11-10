@@ -8,7 +8,7 @@ const AnecdoteList = () => {
 
   const vote = (anecdote) => {
     dispatch(likeAnectodte(anecdote))
-    dispatch(showNotification(`Voted ${anecdote.content}`))
+    dispatch(showNotification(`Voted ${anecdote.content}`, 10))
   }
 
   return (
