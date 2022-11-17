@@ -4,6 +4,7 @@
     box-sizing: border-box;
     margin-bottom: 16px;
     border: #33332d 1px solid;
+    padding: 4px;
 }
 
 .form-label {
@@ -34,4 +35,17 @@
 
 .spacer-margin {
     margin-right: 16px;
+}
+
+.button-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.login-form {
+    padding: 16px 0 16px;
+}
+
+.login-form div {
+    padding: 0 0 8px;
 }

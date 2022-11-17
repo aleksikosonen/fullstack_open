@@ -123,6 +123,7 @@ const resolvers = {
             invalidArgs: args,
           })
         }
+        console.log('uuden kirjoittajan kirja', book)
         return book
       }
       const book = new Book({ ...args, author: addedBookAuthor._id })
@@ -133,10 +134,12 @@ const resolvers = {
           invalidArgs: args,
         })
       }
+      console.log('vanhan kirjoittajan kirja', book)
       return book
     },
     editAuthor: async (root, args, context) => {
       const currentUser = context.currentUser
+      console.log(currentUser)
       if (!currentUser) {
         throw new AuthenticationError('not authenticated')
       }
@@ -186,9 +189,7 @@ const server = new ApolloServer({
     const auth = req ? req.headers.authorization : null
     if (auth && auth.toLowerCase().startsWith('bearer ')) {
       const decodedToken = jwt.verify(auth.substring(7), JWT_SECRET)
-      const currentUser = await User.findById(decodedToken.id).populate(
-        'friends'
-      )
+      const currentUser = await User.findById(decodedToken.id)
       return { currentUser }
     }
   },

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ALL_BOOKS, CREATE_BOOK } from '../queries'
+import { ALL_AUTHORS, ALL_BOOKS, CREATE_BOOK } from '../queries'
 import { useMutation } from '@apollo/client'
 import Notify from './Notify'
 
@@ -12,7 +12,7 @@ const NewBook = (props) => {
   const [error, setError] = useState('')
 
   const [addBook] = useMutation(CREATE_BOOK, {
-    refetchQueries: [{ query: ALL_BOOKS }],
+    refetchQueries: [{ query: ALL_BOOKS }, {query: ALL_AUTHORS}],
     onError: (error) => {
       setError('Error adding a book')
       setTimeout(() => {

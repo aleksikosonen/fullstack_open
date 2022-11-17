@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useMutation } from '@apollo/client'
 import Notify from './Notify'
 
-const Authors = (props) => {
+const Authors = ({show, token}) => {
   const result = useQuery(ALL_AUTHORS)
   const [name, setName] = useState('')
   const [bornYear, setBornYear] = useState('')
@@ -20,7 +20,7 @@ const Authors = (props) => {
     },
   })
 
-  if (!props.show) {
+  if (!show) {
     return null
   }
   if (result.loading) {
@@ -28,7 +28,6 @@ const Authors = (props) => {
   }
 
   const authors = result.data.allAuthors
-  console.log(authors)
 
   const submit = async (event) => {
     event.preventDefault()
@@ -61,31 +60,37 @@ const Authors = (props) => {
           ))}
         </tbody>
       </table>
-      <h2>Set birthyear</h2>
-      <Notify errorMessage={error} />
-      <form onSubmit={submit}>
-        <div className='form-label'>name</div>
-        <select
-          value={name}
-          onChange={({ target }) => setName(target.value)}
-          className='input'
-        >
-          {authors.map((author) => (
-            <option key={author.name} value={authors.name}>
-              {author.name}
-            </option>
-          ))}
-        </select>
+      {token && (
         <div>
-          <div className='form-label'>born</div>
-          <input
-            value={bornYear}
-            onChange={({ target }) => setBornYear(target.value)}
-            className='input'
-          />
+          <h2>Set birthyear</h2>
+          <Notify errorMessage={error} />
+          <form onSubmit={submit}>
+            <div className='form-label'>name</div>
+            <select
+              value={name}
+              onChange={({ target }) => setName(target.value)}
+              className='input'
+            >
+              {authors.map((author) => (
+                <option key={author.name} value={author.name}>
+                  {author.name}
+                </option>
+              ))}
+            </select>
+            <div>
+              <div className='form-label'>born</div>
+              <input
+                value={bornYear}
+                onChange={({ target }) => setBornYear(target.value)}
+                className='input'
+              />
+            </div>
+            <button type='submit' className='button-primary'>
+              update author
+            </button>
+          </form>
         </div>
-        <button type='submit' className='button-primary'>update author</button>
-      </form>
+      )}
     </div>
   )
 }
