@@ -49,3 +49,12 @@
 .login-form div {
     padding: 0 0 8px;
 }
+
+.flex-wrap {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.bold {
+    font-weight: bold;
+}

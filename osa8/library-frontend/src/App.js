@@ -4,6 +4,7 @@ import Books from './components/Books'
 import NewBook from './components/NewBook'
 import LoginForm from './components/LoginForm'
 import Notify from './components/Notify'
+import Recommendations from './components/Recommendations'
 
 const App = () => {
   const [page, setPage] = useState('authors')
@@ -41,8 +42,17 @@ const App = () => {
           </button>
         ) : (
           <div>
-            <button onClick={() => setPage('add')} className='button-primary spacer-margin'>
+            <button
+              onClick={() => setPage('add')}
+              className='button-primary spacer-margin'
+            >
               add book
+            </button>
+            <button
+              onClick={() => setPage('recommendations')}
+              className='button-primary spacer-margin'
+            >
+              recommendations
             </button>
             <button onClick={logout} className='button-primary'>
               logout
@@ -55,6 +65,8 @@ const App = () => {
       <Books show={page === 'books'} />
 
       <NewBook show={page === 'add'} />
+
+      <Recommendations show={page === 'recommendations'} />
 
       <LoginForm
         show={page === 'login'}
