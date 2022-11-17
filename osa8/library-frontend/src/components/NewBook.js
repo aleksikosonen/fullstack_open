@@ -1,4 +1,7 @@
 import { useState } from 'react'
+import { ALL_BOOKS, CREATE_BOOK } from '../queries'
+import { useMutation } from '@apollo/client'
+import Notify from './Notify'
 
 const NewBook = (props) => {
   const [title, setTitle] = useState('')
@@ -6,6 +9,17 @@ const NewBook = (props) => {
   const [published, setPublished] = useState('')
   const [genre, setGenre] = useState('')
   const [genres, setGenres] = useState([])
+  const [error, setError] = useState('')
+
+  const [addBook] = useMutation(CREATE_BOOK, {
+    refetchQueries: [{ query: ALL_BOOKS }],
+    onError: (error) => {
+      setError('Error adding a book')
+      setTimeout(() => {
+        setError('')
+      }, 3000)
+    },
+  })
 
   if (!props.show) {
     return null
@@ -14,7 +28,10 @@ const NewBook = (props) => {
   const submit = async (event) => {
     event.preventDefault()
 
-    console.log('add book...')
+    // Fixes 400 error in adding a book" 
+    const parsedPublished = parseInt(published)
+  
+    addBook({ variables: { title, author, published: parsedPublished, genres } })
 
     setTitle('')
     setPublished('')
@@ -30,6 +47,7 @@ const NewBook = (props) => {
 
   return (
     <div>
+      <Notify errorMessage={error} />
       <form onSubmit={submit}>
         <div>
           title
@@ -48,7 +66,7 @@ const NewBook = (props) => {
         <div>
           published
           <input
-            type="number"
+            type='number'
             value={published}
             onChange={({ target }) => setPublished(target.value)}
           />
@@ -58,12 +76,12 @@ const NewBook = (props) => {
             value={genre}
             onChange={({ target }) => setGenre(target.value)}
           />
-          <button onClick={addGenre} type="button">
+          <button onClick={addGenre} type='button'>
             add genre
           </button>
         </div>
         <div>genres: {genres.join(' ')}</div>
-        <button type="submit">create book</button>
+        <button type='submit'>create book</button>
       </form>
     </div>
   )

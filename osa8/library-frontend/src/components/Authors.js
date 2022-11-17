@@ -1,8 +1,25 @@
-import { ALL_AUTHORS } from "../queries"
+import { ALL_AUTHORS, EDIT_AUTHOR } from '../queries'
 import { useQuery } from '@apollo/client'
+import { useState } from 'react'
+import { useMutation } from '@apollo/client'
+import Notify from './Notify'
 
 const Authors = (props) => {
   const result = useQuery(ALL_AUTHORS)
+  const [name, setName] = useState('')
+  const [bornYear, setBornYear] = useState('')
+  const [error, setError] = useState('')
+
+  const [editAuthor] = useMutation(EDIT_AUTHOR, {
+    refetchQueries: [{ query: ALL_AUTHORS }],
+    onError: (error) => {
+      setError('Error editing author')
+      setTimeout(() => {
+        setError('')
+      }, 3000)
+    },
+  })
+
   if (!props.show) {
     return null
   }
@@ -11,6 +28,19 @@ const Authors = (props) => {
   }
 
   const authors = result.data.allAuthors
+  console.log(authors)
+
+  const submit = async (event) => {
+    event.preventDefault()
+
+    // Fixes 400 error in adding a book"
+    const parsedYear = parseInt(bornYear)
+
+    editAuthor({ variables: { name, setBornTo: parsedYear } })
+
+    setName('')
+    setBornYear('')
+  }
 
   return (
     <div>
@@ -31,6 +61,31 @@ const Authors = (props) => {
           ))}
         </tbody>
       </table>
+      <h2>Set birthyear</h2>
+      <Notify errorMessage={error} />
+      <form onSubmit={submit}>
+        <div className='form-label'>name</div>
+        <select
+          value={name}
+          onChange={({ target }) => setName(target.value)}
+          className='input'
+        >
+          {authors.map((author) => (
+            <option key={author.name} value={authors.name}>
+              {author.name}
+            </option>
+          ))}
+        </select>
+        <div>
+          <div className='form-label'>born</div>
+          <input
+            value={bornYear}
+            onChange={({ target }) => setBornYear(target.value)}
+            className='input'
+          />
+        </div>
+        <button type='submit' className='button-primary'>update author</button>
+      </form>
     </div>
   )
 }
