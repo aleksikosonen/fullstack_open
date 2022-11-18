@@ -5,16 +5,19 @@ import NewBook from './components/NewBook'
 import LoginForm from './components/LoginForm'
 import Notify from './components/Notify'
 import Recommendations from './components/Recommendations'
+import { useApolloClient } from '@apollo/client'
 
 const App = () => {
   const [page, setPage] = useState('authors')
   const [token, setToken] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
+  const client = useApolloClient()
 
   const logout = () => {
-    localStorage.setItem('phonenumbers-user-token', null)
     setToken(null)
     setPage('authors')
+    localStorage.clear()
+    client.resetStore()
   }
 
   return (

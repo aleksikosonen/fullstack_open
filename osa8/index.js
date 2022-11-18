@@ -147,8 +147,8 @@ const resolvers = {
       if (!authorToEdit) {
         return null
       }
-      authorToEdit.born = args.setBornTo
       try {
+        authorToEdit.born = args.setBornTo
         await authorToEdit.save()
       } catch (error) {
         throw new UserInputError(error.message, {

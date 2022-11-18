@@ -26,7 +26,6 @@ const Authors = ({show, token}) => {
   if (result.loading) {
     return <div>loading..</div>
   }
-
   const authors = result.data.allAuthors
 
   const submit = async (event) => {
@@ -34,8 +33,10 @@ const Authors = ({show, token}) => {
 
     // Fixes 400 error in adding a book"
     const parsedYear = parseInt(bornYear)
+    console.log(parsedYear)
 
     editAuthor({ variables: { name, setBornTo: parsedYear } })
+    console.log('editauthor')
 
     setName('')
     setBornYear('')
