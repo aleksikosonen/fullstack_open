@@ -8,7 +8,7 @@ interface Result {
   average: number
 }
 
-const calculateExercises = (trainingWeek: number[], target: number): Result => {
+export const calculateExercises = (trainingWeek: number[], target: number): Result => {
   const periodLength = trainingWeek.length;
   const trainingDays = trainingWeek.filter(
     (dailyHours) => dailyHours > 0
@@ -27,7 +27,6 @@ const calculateExercises = (trainingWeek: number[], target: number): Result => {
 
   let rating = 0;
   let ratingDescription = 'initial';
-  console.log(trainingHours);
   const highHours = 14;
   const mediumHours = 7;
 
