@@ -13,13 +13,13 @@ const getPatientEntries = (): Array<Patient> => {
 }
 
 const getNonSensitivePatientEntries = (): NonSensitivePatient[] => {
-  return patients.map(({ id, name, dateOfBirth, gender, occupation, entries }) => ({
-    id,
+  return patients.map(({ name, dateOfBirth, gender, occupation, entries, id }) => ({
     name,
     dateOfBirth,
     gender,
     occupation,
-    entries
+    entries,
+    id
   }))
 }
 

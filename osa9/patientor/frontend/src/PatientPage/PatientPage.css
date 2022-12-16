@@ -2,6 +2,11 @@
     padding: 0.5em;
 }
 
+.padding-bottom {
+    padding-bottom: 0.5em;
+}
+
+
 .bold {
     font-weight: bold;
 }
