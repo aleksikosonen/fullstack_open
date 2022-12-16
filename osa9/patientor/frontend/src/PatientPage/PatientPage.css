@@ -10,3 +10,14 @@
 .bold {
     font-weight: bold;
 }
+
+.entry-box {
+    border: 1px solid #999;
+    margin-bottom: 1em;
+    padding: 1em;
+    border-radius: 4px;
+}
+
+.entry-box:hover {
+    box-shadow:  0 1px 5px #999;
+}

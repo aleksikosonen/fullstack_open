@@ -9,6 +9,7 @@ import './PatientPage.css'
 import MaleIcon from '@mui/icons-material/Male'
 import TransgenderIcon from '@mui/icons-material/Transgender'
 import FemaleIcon from '@mui/icons-material/Female'
+import EntryDetails from '../components/EntryDetail'
 
 const PatientPage = () => {
   const { id } = useParams<{ id: string }>()
@@ -91,23 +92,22 @@ const PatientPage = () => {
     }
   }
 
-  const patientEntryDetails = (patientEntry: Entry) => {
+  const patientEntryDetails = (patientEntry: Entry, patientById: Patient) => {
     return (
-      <div key={patientEntry.id}>
-        <h3>Entries</h3>
-        <div key={patientEntry.id}>
-          {patientEntry.date} {patientEntry.description}
-        </div>
+      <div className='entry-box' key={patientEntry.id}>
+        <EntryDetails entry={patientEntry} patient={patientById}/>
         {patientEntry.diagnosisCodes && (
-          <ul>
-            {patientEntry.diagnosisCodes.map((diagnosisCode) => {
-              return (
-                <li key={diagnosisCode}>
-                  {diagnosisCode} {searchDiagnosisFromCode(diagnosisCode)}
-                </li>
-              )
-            })}
-          </ul>
+          <div>
+            <ul>
+              {patientEntry.diagnosisCodes.map((diagnosisCode) => {
+                return (
+                  <li key={diagnosisCode}>
+                    {diagnosisCode} {searchDiagnosisFromCode(diagnosisCode)}
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
         )}
       </div>
     )
@@ -126,8 +126,9 @@ const PatientPage = () => {
           </div>
           {patientById.entries && (
             <div>
+              <h3>Entries</h3>
               {patientById.entries.map((entry) => {
-                return patientEntryDetails(entry)
+                return patientEntryDetails(entry, patientById)
               })}
             </div>
           )}
