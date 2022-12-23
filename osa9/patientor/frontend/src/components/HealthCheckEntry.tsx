@@ -4,12 +4,6 @@ import MedicalServicesIcon from '@mui/icons-material/MedicalServices'
 import './EntryStyle.css'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 
-const assertNever = (value: never): never => {
-  throw new Error(
-    `Unhandled discriminated union member: ${JSON.stringify(value)}`
-  )
-}
-
 const HealthCheckEntryDetail: React.FC<{
   healthCheckEntry: HealthCheckEntry
 }> = ({ healthCheckEntry }) => {

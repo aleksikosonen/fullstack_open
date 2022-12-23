@@ -11,7 +11,6 @@ const assertNever = (value: never): never => {
 }
 
 const EntryDetails: React.FC<{ entry: Entry, patient: Patient }> = ({ entry, patient }) => {
-    console.log(entry.type)
   switch (entry.type) {
     case 'Hospital':
       return <HospitalEntryDetail hospitalEntry={entry} />

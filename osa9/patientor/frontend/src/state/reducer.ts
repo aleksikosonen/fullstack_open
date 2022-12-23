@@ -1,5 +1,6 @@
+import { AddEntryFormValues } from './../AddPatientEntryModal/AddEntryForm';
 import { State } from './state'
-import { Patient, Diagnosis } from '../types'
+import { Patient, Diagnosis, Entry } from '../types'
 
 export type Action =
   | {

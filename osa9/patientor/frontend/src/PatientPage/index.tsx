@@ -1,4 +1,4 @@
-import { Box, Typography } from '@material-ui/core'
+import { Box, Button, Typography } from '@material-ui/core'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
@@ -10,6 +10,9 @@ import MaleIcon from '@mui/icons-material/Male'
 import TransgenderIcon from '@mui/icons-material/Transgender'
 import FemaleIcon from '@mui/icons-material/Female'
 import EntryDetails from '../components/EntryDetail'
+import React from 'react'
+import AddEntryForm, { AddEntryFormValues } from '../AddPatientEntryModal/AddEntryForm'
+import AddEntryModal from '../AddPatientEntryModal'
 
 const PatientPage = () => {
   const { id } = useParams<{ id: string }>()
@@ -18,6 +21,35 @@ const PatientPage = () => {
   const [diagnosisState, setDiagnosisState] = useState<Diagnosis[] | undefined>(
     undefined
   )
+  const [modalOpen, setModalOpen] = React.useState<boolean>(false)
+  const [error, setError] = React.useState<string>()
+
+  const openModal = (): void => setModalOpen(true)
+
+  const closeModal = (): void => {
+    setModalOpen(false)
+    setError(undefined)
+  }
+
+  const submitNewEntry = async (values: AddEntryFormValues) => {
+    try {
+      const { data: newEntry } = await axios.post<Entry>(
+        `${apiBaseUrl}/patients/${id}/entries`,
+        values
+      );
+      const patientId = id as string
+      patients[patientId].entries.push(newEntry)
+      closeModal();
+    } catch (e: unknown) {
+      if (axios.isAxiosError(e)) {
+        console.error(e?.response?.data || "Unrecognized axios error");
+        setError(String(e?.response?.data?.error) || "Unrecognized axios error");
+      } else {
+        console.error("Unknown error", e);
+        setError("Unknown error");
+      }
+    }
+  }
 
   const fetchPatient = async () => {
     // to make sure patient is not re-fetched
@@ -95,7 +127,7 @@ const PatientPage = () => {
   const patientEntryDetails = (patientEntry: Entry, patientById: Patient) => {
     return (
       <div className='entry-box' key={patientEntry.id}>
-        <EntryDetails entry={patientEntry} patient={patientById}/>
+        <EntryDetails entry={patientEntry} patient={patientById} />
         {patientEntry.diagnosisCodes && (
           <div>
             <ul>
@@ -124,6 +156,17 @@ const PatientPage = () => {
           <div className='padding-bottom'>
             occupation: {patientById?.occupation}
           </div>
+          <div>
+              <AddEntryModal
+                modalOpen={modalOpen}
+                onSubmit={submitNewEntry}
+                error={error}
+                onClose={closeModal}
+              />
+              <Button variant='contained' onClick={() => openModal()}>
+                Add New Entry
+              </Button>
+            </div>
           {patientById.entries && (
             <div>
               <h3>Entries</h3>
