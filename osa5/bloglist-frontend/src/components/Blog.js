@@ -33,7 +33,7 @@ const Blog = ({ blog, updateBlogWithLikes, deleteBlog, user }) => {
     <div className='blog'>
       <div className='title'>
         {blog.title}
-        <button className='viewDetails' id='viewBlog' onClick={handleDetails}>View</button>
+        <button className='viewDetails' id='viewBlog' onClick={handleDetails}>{showDetails ? ('hide') : ('view')}</button>
       </div>
       {showDetails && (
         <div className='blogDetails'>
