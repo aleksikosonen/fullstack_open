@@ -4,6 +4,7 @@ import Notification from './components/Notification'
 import { initializeAnecdotes } from './reducers/anecdoteReducer'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
+import Filter from './components/Filter'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -15,6 +16,7 @@ const App = () => {
     <div>
       <h2>Anecdotes</h2>
       <Notification />
+      <Filter />
       <AnecdoteList />
       <AnecdoteForm />
     </div>
