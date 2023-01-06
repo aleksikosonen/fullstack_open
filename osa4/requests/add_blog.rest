@@ -1,11 +1,9 @@
-post http://localhost:3001/api/blogs
+post http://localhost:3003/api/blogs/
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkdvaXN0aW5lbiIsImlkIjoiNjM1Y2YwZWJlMmViOGU1YTQ2NDE1YTk4IiwiaWF0IjoxNjY3MDM1MzgxfQ.qg8hpezpe_YRJYpQjit1p9yzB1QOUQq5i8f6AAHkUe8
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkdvaXN0aW5lbiIsImlkIjoiNjNiN2NjZTRjOWNmMDEyODY5ZmJiZDlkIiwiaWF0IjoxNjcyOTkyNTMzfQ.VyXwNL8Kat9b-Q_rZCM280kyRB06GdJyAI5hZ0tVpac
 
 {
-    "title": "Maantiepyöräily on kivaa",
+    "title": "Maantiepsyöräily on kivaa",
     "author": "Maantie Pyöräilijä",
-    "url": "https://www.canyon.com/",
-    "likes": "100",
-    "userId": "635cf0ebe2eb8e5a46415a98"
+    "url": "https://www.canyon.com/"
 }

@@ -20,12 +20,15 @@ mongoose
     logger.error('error connection to MongoDB:', error.message)
   })
 
+const userExtractor = middleware.userExtractor
+
 app.use(cors())
 app.use(express.static('build'))
 app.use(express.json())
 app.use(middleware.requestLogger)
+app.use(middleware.tokenExtractor)
 
-app.use('/api/blogs', blogsRouter)
+app.use('/api/blogs', userExtractor, blogsRouter)
 app.use('/api/login', loginRouter)
 app.use('/api/users', usersRouter)
 
